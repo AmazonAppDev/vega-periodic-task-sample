@@ -1,0 +1,13 @@
+{
+    "extends": "@react-native/typescript-config",
+    "compilerOptions": {
+        "types": ["jest", "@amazon-devices/react-native-kepler"], // Override "jest", "react-native" from @react-native/typescript-config
+        // Type-check against the Turbo Module's sources, so the app type-checks
+        // before the module is built. Metro bundles the built module (dist/).
+        "paths": {
+            "@amazon-devices/periodic-task-scheduler": ["./turbo-module/src"],
+        },
+    },
+    // The Turbo Module has its own tsconfig.json, tests and build.
+    "exclude": ["node_modules", "turbo-module"],
+}

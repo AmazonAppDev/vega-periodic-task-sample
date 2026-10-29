@@ -1,0 +1,38 @@
+# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: MIT-0
+
+schema-version = 1
+
+[package]
+title = "Periodic Task Sample"
+version = "0.1.0"
+id = "com.amazondeveloper.periodictasksample"
+
+[os.version]
+min = "1.2"
+target = "1.2"
+
+[needs]
+[components]
+[[components.interactive]]
+id = "com.amazondeveloper.periodictasksample.main"
+runtime-module = "/com.amazon.kepler.runtime.react_native_kepler_4@IReactNativeKepler_0"
+launch-type = "singleton"
+categories = ["com.amazon.category.main"]
+
+# The background task that Task Manager launches on the schedule set by the app.
+# Its JS entry point is registered in task.js, which the build bundles separately
+# (task.hermes.bundle). The component id must match the one passed to
+# PeriodicTasks.scheduleRepeating().
+[[components.task]]
+id = "com.amazondeveloper.periodictasksample.periodicTask"
+runtime-module = "/com.amazon.kepler.runtime.react_native_kepler_headless_4@IReactNativeKeplerHeadless_0"
+
+# Each process group must use a single runtime module, so the UI and the
+# headless task run in separate processes.
+[processes]
+[[processes.group]]
+component-ids = ["com.amazondeveloper.periodictasksample.main"]
+
+[[processes.group]]
+component-ids = ["com.amazondeveloper.periodictasksample.periodicTask"]

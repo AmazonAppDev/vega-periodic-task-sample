@@ -1,0 +1,37 @@
+# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: MIT-0
+
+# Lints and runs the unit tests for the app and the Turbo Module. Building the
+# vpkg needs the Vega SDK, which isn't available on GitHub-hosted runners.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            turbo-module/package-lock.json
+      # npm 10 (bundled with Node 22) runs the turbo-module's prepare script even with
+      # --ignore-scripts; npm 11 honours the flag.
+      - run: npm install -g npm@11
+      # Skip lifecycle scripts: the turbo-module's prepare script runs `vega build`,
+      # which needs the Vega SDK. Lint and the unit tests only use its sources.
+      - run: npm ci --ignore-scripts
+      - run: npm --prefix turbo-module ci --ignore-scripts
+      - run: npm run lint
+      - run: npm --prefix turbo-module run lint
+      - run: npm test
