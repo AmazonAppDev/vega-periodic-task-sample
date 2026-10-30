@@ -9,8 +9,8 @@ version = "0.1.0"
 id = "com.amazondeveloper.periodictasksample"
 
 [os.version]
-min = "1.2"
-target = "1.2"
+min = "2.0"
+target = "2.0"
 
 [needs]
 [components]
